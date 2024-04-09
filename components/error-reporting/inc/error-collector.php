@@ -43,6 +43,7 @@ function chroma_error_collector(WP_REST_Request $request) {
         $conn->query($create_table);
       }
 
+
         // prepare and bind
         $error_msg = sanitize_input_error($conn, $request->get_param('client_error'));
         $error_msg_prepare = "SELECT * FROM chromaErrors WHERE error_msg = '$error_msg' LIMIT 10";

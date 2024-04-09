@@ -1,6 +1,7 @@
 <?php
 //custom filters for content
 global $post;
+
 //filter for view as one page slider options
 function convert_multipage_post( $content ) {
   $content = str_replace('<!--nextpage-->', '', $content);
@@ -53,31 +54,34 @@ if (get_option('comments_button') == 'yes') {
 
 //strip unwanted stuff from content
 function chroma_custom_content_filter( $content ) {
-    //remove p tags around imgs, scripts, iframes and blockquotes
-		$content = preg_replace('/<p>\s*(<a .*>)?\s*(<img .*\s*\/>)\s*(<\/a>)?\s*<\/p>/iU', '\1\2\3', $content);
-    $content = preg_replace('/<p>(\s*)(<img .*\s*\/*>)(\s*)<\/p>/iU', '\2', $content);
-		$content = preg_replace('/<p>\s*(<script.*>*.<\/script>)\s*<\/p>/iU', '\1', $content);
-    $content = preg_replace('/<p>\s*(<a.*>*.<\/a>)\s*<\/p>/iU', '\1', $content);
-	  $content = preg_replace('/<p>\s*(<iframe.*>*.<\/iframe>)\s*<\/p>/iU', '\1', $content);
-		$content = preg_replace('/<p>\s*(<blockquote.*>*.<\/blockquote>)\s*<\/p>/iU', '\1', $content);
-    $content = preg_replace('/CONCLUSION/', 'Conclusion', $content);
-    //never ever use text-align justify
-    $content = str_replace('text-align: justify;', '', $content);
-    $content = str_replace('text-align: center;', '', $content);
-    $content = str_replace('text-transform: uppercase;', '', $content);
-    //remove these BS <p>&nbsp;</p>
-    $content = str_replace('<p>&nbsp;</p>', '', $content);
-    $content = preg_replace('/<!--(.|\s)*?-->/', '', $content);
-    $content = str_replace('<p></p>', '', $content);
+  $content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
+error_log($content);
+  $dom = new DOMDocument();
 
-    //find all name attributes and store
-		preg_match_all('/name=\".*\"/iU', $content, $names );
-    foreach ($names as $name) {
-      $rename = str_replace(' ', '', $name);
-      $content = str_replace($name, $rename, $content);
-    }
+  libxml_use_internal_errors(true);
+  $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+  $errors = libxml_get_errors(); // Obtener los errores
+foreach ($errors as $error) {
+    // Procesar o registrar los errores
+    error_log("LibXML error: {$error->message}\n");
+}
+  libxml_clear_errors();
 
-		return $content;
+  $content = preg_replace('/<p>\s*(<a .*>)?\s*(<img .*\s*\/>)\s*(<\/a>)?\s*<\/p>/iU', '\1\2\3', $content);
+  $content = preg_replace('/<p>\s*(<script.*?>.*?<\/script>)\s*<\/p>/is', '\1', $content);
+  $content = preg_replace('/<p>\s*(<iframe.*?>.*?<\/iframe>)\s*<\/p>/is', '\1', $content);
+  $content = preg_replace('/<p>\s*(<blockquote.*?>.*?<\/blockquote>)\s*<\/p>/is', '\1', $content);
+  $content = preg_replace('/CONCLUSION/', 'Conclusion', $content);
+  $content = str_replace(['text-align: justify;', 'text-align: center;', 'text-transform: uppercase;'], '', $content);
+  $content = str_replace('<p>&nbsp;</p>', '', $content);
+  $content = preg_replace('/<!--(.|\s)*?-->/', '', $content);
+  $content = str_replace('<p></p>', '', $content);
+
+  $content = $dom->saveHTML();
+
+  $content = preg_replace(['/^<!DOCTYPE.+?>/', '/<html>/', '/<\/html>/', '/<body>/', '/<\/body>/'], ['', '', '', '', ''], $content);
+
+  return $content;
 }
 add_filter( 'the_content', 'chroma_custom_content_filter', 99 );
 
@@ -106,7 +110,7 @@ function related_a_tag($content) {
       return $content;
     $content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
     $dom = new DOMDocument();
-    $dom->loadHTML($content);
+    $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
     $a = $dom->getElementsByTagName('a');
     if ($a->length <= 0)
     {
@@ -116,10 +120,10 @@ function related_a_tag($content) {
       if(stripos($a_tag->textContent, 'Related') === 0)
       {
         $a_tag->setAttribute('class', 'hg_related');
-        $dom->saveHTML($a_tag);
+        //$dom->saveHTML($a_tag);
       }
     }
-    $content = preg_replace('/^<!DOCTYPE.+?>/', '', str_replace( array('<html>', '</html>', '<body>', '</body>'), array('', '', '', ''), $dom->saveHTML()));
+    $content = $dom->saveHTML();
     return $content;
 }
 add_filter( 'the_content', 'related_a_tag' );

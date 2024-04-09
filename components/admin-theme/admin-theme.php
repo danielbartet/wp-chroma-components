@@ -11,7 +11,6 @@
  */
 
 class chroma_admin_theme {
-
 	/**
 	 * List of colors registered in this plugin.
 	 *
@@ -27,6 +26,7 @@ class chroma_admin_theme {
 
 	function __construct() {
 		add_action( 'admin_init' , array( $this, 'add_colors' ) );
+		add_action( 'admin_footer','wp_print_media_templates' );
 	}
 
 	/**

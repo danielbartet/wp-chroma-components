@@ -3,6 +3,7 @@ import 'whatwg-fetch';
 'use strict';
 // Add a new listener to track event immediately, then send errors after a certain time threshold
 const chromaErrorHandler = (() => {
+  // errorArray is declared as an empty array
   var errorArray = []
   //listen for error events
   window.addEventListener('error', (ev) => {

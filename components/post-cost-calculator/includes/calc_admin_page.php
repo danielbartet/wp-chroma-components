@@ -171,6 +171,7 @@ function post_cost_calculator_options()  {
   $articlesToCalc = new WP_Query( array(
 	'posts_per_page'   => -1,
   'author_name' => get_option($option_Author),
+  'post_status' => array('publish','future' ),
   'date_query' => array(
     array(
       'after' => $after,

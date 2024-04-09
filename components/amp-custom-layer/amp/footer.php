@@ -8,6 +8,6 @@
    <a class="amp-wp-footer-a policy-link" href="<?php echo get_template_directory_uri(); ?>/terms/">Terms of Use</a>
    <a class="amp-wp-footer-a policy-link" href="<?php echo get_template_directory_uri(); ?>/privacy-policy/">Privacy Policy</a>
  </div>
- <div class="amp-wp-footer-div disclaimer">Copyright © 2017 iDrop News. All rights reserved. By using iDrop News you agree to our terms and conditions. iDrop News and its contents are not affiliated or endorsed by Apple, Inc.</div>
+ <div class="amp-wp-footer-div disclaimer">Copyright © 2021 iDrop News. All rights reserved. By using iDrop News you agree to our terms and conditions. iDrop News and its contents are not affiliated or endorsed by Apple, Inc.</div>
 <div class="amp-wp-footer-div color-bar"></div>
 </footer>

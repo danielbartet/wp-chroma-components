@@ -6,6 +6,7 @@ function chroma_social_analytics() {
   include plugin_dir_path( __FILE__ ) . 'inc/classes/twitter-share-count.php';
   include plugin_dir_path( __FILE__ ) . 'inc/classes/master-share-count.php';
   include plugin_dir_path( __FILE__ ) . 'views/analytics-view.php';
+  include plugin_dir_path( __FILE__ ) . 'views/wordcount-view.php';
   include plugin_dir_path( __FILE__ ) . 'views/default.php';
 }
 
@@ -13,6 +14,7 @@ add_action( 'rest_api_init', function () {
   register_rest_route( 'chroma', '/share-count', array(
     'methods' => 'POST',
     'callback' => array('FacebookShareCount', 'get_share_count_endpoint'),
+    'permission_callback' => '__return_true',
   ));
 });
 
@@ -20,14 +22,16 @@ add_action( 'rest_api_init', function () {
   register_rest_route( 'chroma', '/social-count', array(
     'methods' => 'POST',
     'callback' => 'MasterShareCount::update_share_count_endpoint',
-  ));
+    'permission_callback' => '__return_true',  
+));
 });
 
 add_action( 'rest_api_init', function () {
   register_rest_route( 'chroma', '/social-get-url-from-id', array(
     'methods' => 'POST',
     'callback' => 'MasterShareCount::get_url_from_id',
-  ));
+    'permission_callback' => '__return_true',  
+));
 });
 //app data
 add_action( 'wp_footer', 'chroma_localize_data', 11);

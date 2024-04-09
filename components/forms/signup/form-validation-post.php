@@ -5,6 +5,7 @@ add_action( 'rest_api_init', function () {
   register_rest_route( 'chroma', 'form-processer', array(
     'methods' => 'POST',
     'callback' => 'chroma_form_processer',
+    'permission_callback' => '__return_true',
   ) );
 } );
 

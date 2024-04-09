@@ -13,7 +13,7 @@ function isa_remove_amp_google_fonts() {
 }
 
 //Disable Customizer on WP backend
-add_filter( 'amp_customizer_is_enabled', '__return_false' );\
+add_filter( 'amp_customizer_is_enabled', '__return_false' );
 
 // Set a custom template file
 add_filter( 'amp_post_template_file', 'chroma_amp_set_custom_template', 10, 3 );
@@ -83,7 +83,7 @@ if (get_option('schemaurl'))
 }
 
 function chroma_amp_add_ad_sanitizer( $sanitizer_classes, $post ) {
-	include( dirname( __FILE__ ) . '/classes/chroma-amp-ad-injection-sanitizer.php' );
+	include_once( dirname( __FILE__ ) . '/classes/chroma-amp-ad-injection-sanitizer.php' );
 	$sanitizer_classes[ 'Chroma_Amp_Ad_Injection_Sanitizer' ] = array(); // the array can be used to pass args to your sanitizer and accessed within the class via `$this->args`
 	return $sanitizer_classes;
 }

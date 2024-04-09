@@ -1,6 +1,6 @@
 <?php
 /*
-* Extend the default behavior of Amazon Affiliate Link Builder, by dequeueing their assets, appending oneLink.js(an amazon geo autolinking service) where necessary
+* Override the default behavior of Amazon Affiliate Link Builder, by dequeueing their assets, appending oneLink.js(an amazon geo autolinking service) where necessary
 */
 
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );

@@ -5,7 +5,7 @@ if (get_option('enable_quizzes') == 'yes') {
 }
 function register_viewport() {
   global $post;
-  if ( $post->post_type == 'cm-quiz' )
+  if ( is_object($post) && isset($post->post_type) && $post->post_type == 'cm-quiz' )
     echo '<meta name="viewport" content="width=device-width,initial-scale=1.0">';
 }
 add_action('wp_head', 'register_viewport');
@@ -28,6 +28,7 @@ add_action( 'rest_api_init', function () {
   register_rest_route( 'chroma', 'cmevents', array(
     'methods' => 'POST',
     'callback' => 'cm_event_processer',
+    'permission_callback' => '__return_true',
   ) );
 } );
 

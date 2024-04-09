@@ -46,6 +46,14 @@ function chroma_settings()  {
       update_option('enable_quizzes', $_POST['enable_quizzes']);
     else
       update_option('enable_quizzes', null);
+      if (isset($_POST['excludeHomepage']) && $_POST['excludeHomepage'])
+      update_option('excludeHomepage', $_POST['excludeHomepage']);
+    else
+      update_option('excludeHomepage', null);
+      if (isset($_POST['giveawayOption']) && $_POST['giveawayOption'])
+      update_option('giveawayOption', $_POST['giveawayOption']);
+      else 
+        update_option('giveawayOption', null);
   }
 
 
@@ -56,6 +64,39 @@ function chroma_settings()  {
   $theme_color = get_option('theme_color');
   $icon_url = get_option('icon_url');
   $enable_quizzes = get_option('enable_quizzes');
+  $excludeHomepage = get_option('excludeHomepage');
+  $giveawayOption = get_option('giveawayOption');
+  echo $giveawayOption;
+
+  // giveaway logic
+  function getCurrentDate() {
+		date_default_timezone_set('America/Los_Angeles');
+		$current = date('m/d/Y h:i:s a', time());
+		return strtotime($current);
+	}
+
+  $args = array(
+    'numberposts' => -1,
+    'orderby' => 'post_date',
+    'order' => 'DESC',
+    'category__in' => array( 17047 ),
+  );
+  // query giveaways
+  $giveaways = new WP_Query($args);
+  $giveaway_titles = array();
+
+  if($giveaways->have_posts()) {
+    $i = 0;
+    while($giveaways->have_posts()) {
+      $giveaways->the_post();
+      $time = strtotime(get_field('giveaway_end_date'));
+      if($current < $time) {
+        array_push($giveaway_titles, $giveaways->posts[$i]->post_title);
+      }
+      $i++;
+    }
+  }
+  array_push($giveaway_titles, 'Default: Randomize Giveaways');
 
   ?>
   <div class="updated"><p><strong><?php _e('settings saved.', 'menu-test' ); ?></strong></p></div>
@@ -107,6 +148,31 @@ function chroma_settings()  {
           <th scope="row">Enable Quizzes?</th>
           <td>
             <input type="checkbox" name="enable_quizzes" <?php checked($enable_quizzes,'yes'); ?> value="yes"/>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>Exclude from Homepage</label>
+          </td>
+          <td>
+            <textarea type="textarea" class="widefat" cols="50" rows="2" wrap="hard" name="excludeHomepage" value="<?php echo $excludeHomepage; ?>"/><?php echo $excludeHomepage; ?></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>Lock a Giveaway</label>
+          </td>
+          <td>
+            <select id="giveawayOption" name="giveawayOption">
+              <?php foreach($giveaway_titles as &$giveaway) { ?>
+                    <option 
+                      value="<?php echo $giveaway; ?>" 
+                      <?php echo ($giveawayOption == $giveaway) ? 'selected' : ''?>
+                    >
+                      <?php echo $giveaway; ?>
+                    </option>
+                <?php } ?>
+            </select>
           </td>
         </tr>
         <tr valign="top">

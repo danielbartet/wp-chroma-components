@@ -86,7 +86,7 @@ class Chromma_Lazy_Load_Module {
       if($load_effect === "blur") {
         global $wpdb;
         $attachment_id = $wpdb->get_col($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid='%s';", $imgSrc))[0];
-        $img_blur = wp_get_attachment_image_src($attachment_id, $lowest_dimension_mod)[0];
+        $img_blur = wp_get_attachment_image_src($attachment_id)[0];
         $img->setAttribute('src', $img_blur);
       } else {
         $img->setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');

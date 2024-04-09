@@ -8,7 +8,7 @@
   <?php $this->load_parts( array( 'style' ) ); ?>
   <?php do_action( 'amp_post_template_css', $this ); ?>
 	</style>
-	<script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
+	<!-- <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script> -->
 	<script async custom-element="amp-social-share" src="https://cdn.ampproject.org/v0/amp-social-share-0.1.js"></script>
 	<script async
 	 custom-element="amp-auto-ads"

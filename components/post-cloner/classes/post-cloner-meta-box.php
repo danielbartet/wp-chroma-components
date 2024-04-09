@@ -93,7 +93,7 @@ abstract class Post_Cloner_Meta_Box
    public static function post_sync_save($post_id) {
       $post_sync = ( isset($_POST['post_sync']) ) ? $_POST['post_sync'] : null;
       update_post_meta($post_id, 'post_sync', $post_sync);
-      if( $post_sync != 'true' && $ref  == null )
+      if( $post_sync != 'true')
         return;
       $clonez = get_post_meta($post_id, 'clonez', true);
       $clonez = array_filter($clonez, function($clone) {return (!empty($clone) && $clone != NULL); });
@@ -216,7 +216,7 @@ abstract class Post_Cloner_Meta_Box
     <br />
     <?php
     function post_clone_links() {
-      $clonez = get_post_meta(get_the_ID(), 'clonez', true);
+      $clonez = get_post_meta(get_the_ID(), 'clonez', false);
       $clonez = array_filter($clonez, function($clone) {return (!empty($clone) && $clone != NULL); });
       if (count($clonez) > 0) {
         foreach($clonez  as $clone) {

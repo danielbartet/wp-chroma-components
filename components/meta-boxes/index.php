@@ -6,6 +6,7 @@
 //Fire our meta box setup function on the post editor screen.
 add_action( 'load-post.php', 'chromma_post_meta_boxes_setup' );
 add_action( 'load-post-new.php', 'chromma_post_meta_boxes_setup' );
+add_action( 'admin_footer','wp_print_media_templates' );
 
 //meta box manifest
 foreach(glob(plugin_dir_path( __FILE__ ) . "boxes/*.php") as $meta_box_interface) {
@@ -34,6 +35,7 @@ function chromma_add_post_meta_boxes() {
   meta_box_format_options::add_box();
   meta_box_plag_warn::add_box();
   meta_box_arb_ad_options::add_box();
+  reverse_order::add_box();
 }
 
 // Save the meta boxs' values as post metadata.
@@ -51,6 +53,7 @@ function chromma_save_meta( $post_id, $post ) {
   meta_box_featured_img_toggle::check_posted_values($post);
   meta_box_format_options::check_posted_values($post);
   meta_box_arb_ad_options::check_posted_values($post);
+  reverse_order::check_posted_values($post);
 }
 add_action( 'save_post', 'chromma_save_meta', 10, 2 );
 

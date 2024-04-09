@@ -15,6 +15,7 @@ function amp_custom_layer_menu() {
     plugins_url( '/assets/images/icon.png', __DIR__ )
   );
 }
+
 function amp_custom_layer_options() {
   //variables for the field
   $option_googleanalytics = 'googleanalytics';

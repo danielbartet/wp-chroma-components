@@ -9,12 +9,13 @@ function auto_gen_alt_attr($post_ID) {
     //sanitize by removing hyphens, underscores and extra spaces
     $selected_img_title = preg_replace( '%\s*[-_\s]+\s*%', ' ', $selected_img_title);
     //sanitize the title:  capitalize first letter of every word (other letters lower case):
-		$selected_img_title = ucwords( strtolower( $selected_img_title ) );
+		//$selected_img_title = ucwords( strtolower( $selected_img_title ) );
 
     //modify array of image meta data
     $selected_img_meta = array(
       'ID'		=> $post_ID,			// Specify the image (ID) to be updated
       'post_title'	=> $selected_img_title,		// Set image Title to sanitized title
+      'post_content' => $selected_img_title,
     );
 
     //set the image alt-text
