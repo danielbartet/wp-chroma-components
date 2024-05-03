@@ -3,8 +3,8 @@ import './style.sass'
 import { createStore } from 'redux';
 import {addQuestion} from './store/actions'
 import {initState, cmQuizStore, render, questionTracker} from './quiz-store.js'
-import fbInitializer from "/var/www/html/wp-content/plugins/cm-components/components/forms/signup/facebook-api-init.js"
-import chromaFormHandler from '/var/www/html/wp-content/plugins/cm-components/components/forms/signup/form-action.js'
+import fbInitializer from "../../forms/signup/facebook-api-init.js"
+import chromaFormHandler from '../../forms/signup/form-action.js'
 import cmEvent from './cm-analytics.js'
 import {doesExist, getRandomInt} from './utility/functions.js'
 import {setScene} from "./scene/set-scene.js"

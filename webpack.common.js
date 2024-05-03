@@ -1,10 +1,9 @@
-const path = require('path')
-//const HtmlWebpackPlugin = require('html-webpack-plugin')
-const webpack = require("webpack")
-const CleanWebpackPlugin = require('clean-webpack-plugin')
-const autoprefixer = require('autoprefixer')
-const MiniCSSExtractPlugin = require("mini-css-extract-plugin")
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const path = require('path');
+const webpack = require('webpack');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin'); // Importación corregida
+const autoprefixer = require('autoprefixer');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
@@ -19,68 +18,65 @@ module.exports = {
         path: path.resolve(__dirname, 'dist')
     },
     devServer: {
-      contentBase: './dist',
-      compress: true
+        contentBase: './dist',
+        compress: true
     },
     watch: true,
     watchOptions: {
-      ignored: /node_modules/,
-      poll: 3000 // Check for changes every second
+        ignored: /node_modules/,
+        poll: 3000 // Check for changes every second
     },
     optimization: {
-      minimizer: [
-        new UglifyJsPlugin({
-          cache: true,
-          parallel: true
-        }),
-        new OptimizeCSSAssetsPlugin({})
-      ]
-  },
+        minimizer: [
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true
+            }),
+            new OptimizeCssAssetsPlugin({})
+        ]
+    },
     plugins: [
-        new CleanWebpackPlugin(['dist']),
-        // new HtmlWebpackPlugin({
-        //     title: 'Output Management'
-        // }),
-        new MiniCSSExtractPlugin({
-            filename: "cmquiz.css",
+        new CleanWebpackPlugin(), // Se utiliza la nueva importación corregida
+        new MiniCssExtractPlugin({
+            filename: 'cmquiz.css',
         }),
         new webpack.LoaderOptionsPlugin({
-          options: {
-            postcss: [
-              autoprefixer()
-            ]
-          }
+            options: {
+                postcss: [
+                    autoprefixer()
+                ]
+            }
         })
     ],
     module: {
         rules: [
             {
-              test: /\.js$/,
-              exclude: /node_modules/,
-              use: [
-                  {
-                    loader: "eslint-loader",
-                    options: {
-                      fix: true,
-                      cache: true
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'eslint-loader',
+                        options: {
+                            fix: true,
+                            cache: true
+                        }
+                    },
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: ['@babel/preset-env']
+                        }
                     }
-                  },
-                  {
-                    loader: 'babel-loader',
-                    query: {
-                        presets: ['env']
-                    }
-                  }
-              ]
+                ]
             },
             {
                 test: /\.(sa|sc|c)ss$/,
                 exclude: /node_modules/,
                 use: [
-                  MiniCSSExtractPlugin.loader,
-                  "css-loader",
-                  "postcss-loader",
-                  "sass-loader"
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'postcss-loader',
+                    'sass-loader'
                 ]
             },
         ]

@@ -1,4 +1,4 @@
-import fbInitializer from "/var/www/html/wp-content/plugins/cm-components/components/forms/signup/facebook-api-init.js"
+import fbInitializer from "./facebook-api-init.js"
 const fbApiInit = new fbInitializer()
 
 function chromaFormHandler (callBack = null) {
