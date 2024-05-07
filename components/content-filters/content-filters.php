@@ -16,7 +16,8 @@ if (get_option('comments_button') == 'yes') {
       try {
         if(empty($content) || (!is_single()) || ( get_post_type( get_the_ID() ) != 'post' ) || has_category('gallery') || ($multipage && $page !== $numpages) )
           return $content;
-        $content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
+        //$content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
+        //$content = htmlentities($content, ENT_QUOTES, 'UTF-8');
         $dom = new DOMDocument();
         $dom->loadHTML($content);
         $comment = $dom->createElement('button');
@@ -54,8 +55,10 @@ if (get_option('comments_button') == 'yes') {
 
 //strip unwanted stuff from content
 function chroma_custom_content_filter( $content ) {
-  $content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
-error_log($content);
+  error_log("##############");
+  error_log($content);
+  //$content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
+  //$content = htmlentities($content, ENT_QUOTES, 'UTF-8');
   $dom = new DOMDocument();
 
   libxml_use_internal_errors(true);
@@ -108,7 +111,8 @@ add_filter( 'mce_buttons', 'my_add_next_page_button', 1, 2 ); // 1st row
 function related_a_tag($content) {
     if(empty($content) || (!is_single()) || ( get_post_type( get_the_ID() ) != 'post' ) )
       return $content;
-    $content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
+    //$content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
+    //$content = htmlentities($content, ENT_QUOTES, 'UTF-8');
     $dom = new DOMDocument();
     $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
     $a = $dom->getElementsByTagName('a');

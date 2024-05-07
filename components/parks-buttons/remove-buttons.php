@@ -8,6 +8,7 @@
  * @param    array    $buttons    The default array of buttons in tinymce
  * @return   array                The updated array of buttons that exludes some items
  */
+if (!function_exists('jivedig_remove_tiny_mce_buttons_from_editor')) {
 add_filter( 'mce_buttons', 'jivedig_remove_tiny_mce_buttons_from_editor');
 function jivedig_remove_tiny_mce_buttons_from_editor( $buttons ) {
    $remove_buttons = array(
@@ -35,8 +36,10 @@ function jivedig_remove_tiny_mce_buttons_from_editor( $buttons ) {
    }
    return $buttons;
 }
+}
 
 
+if (!function_exists('chroma_remove_tiny_mce_buttons')) {
 add_filter( 'mce_buttons_2', 'chroma_remove_tiny_mce_buttons');
 function chroma_remove_tiny_mce_buttons( $buttons ) {
     $remove_buttons = array(
@@ -59,4 +62,5 @@ function chroma_remove_tiny_mce_buttons( $buttons ) {
         }
     }
     return $buttons;
+}
 }
