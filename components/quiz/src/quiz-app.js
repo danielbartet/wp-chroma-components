@@ -1,14 +1,24 @@
 'use strict'
 import './style.sass'
 import { createStore } from 'redux';
-import {addQuestion} from './store/actions'
-import {initState, cmQuizStore, render, questionTracker} from './quiz-store.js'
+import { addQuestion } from './store/actions'
+import { initState, questionTracker } from './quiz-store.js'
 import fbInitializer from "../../forms/signup/facebook-api-init.js"
 import chromaFormHandler from '../../forms/signup/form-action.js'
 import cmEvent from './cm-analytics.js'
-import {doesExist, getRandomInt} from './utility/functions.js'
-import {setScene} from "./scene/set-scene.js"
-cmQuizStore.subscribe(render)
+import { doesExist, getRandomInt } from './utility/functions.js'
+import { setScene } from "./scene/set-scene.js"
+
+// Crear el store de Redux
+const cmQuizStore = createStore(questionTracker, initState);
+cmQuizStore.subscribe(() => {
+  render(cmQuizStore.getState());
+});
+
+// Render function actualizada para recibir state
+function render(state) {
+  console.log(state);
+}
 
 //quiz app controller
 const quizAppCont = function(cmQuiz) {
@@ -391,17 +401,15 @@ const quizAppCont = function(cmQuiz) {
   }
 } // End App
 
-/*
-* Run App
-*/
 function quizMain() {
   var cmQuiz = document.getElementById('cm-quiz')
   if (!doesExist(cmQuiz))
     return;
-  //init quiz
+
   const quizApp = new quizAppCont(cmQuiz)
   quizApp.Init()
-  //init form
-  const formProceszr = new chromaFormHandler(quizApp.generateResults)
-  formProceszr.init()
-} quizMain()
+
+  const formProcessor = new chromaFormHandler(quizApp.generateResults)
+  formProcessor.init()
+}
+quizMain()
