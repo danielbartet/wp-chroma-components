@@ -203,7 +203,8 @@ function kpal_render($content)
   }
     if(count($kws) <= 0)
       return $content;
-    $content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
+    //$content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
+    //$content = htmlentities($content, ENT_QUOTES, 'UTF-8');
     $dom = new DOMDocument();
     $dom->loadHTML($content);
     $dom->encoding = 'utf-8';

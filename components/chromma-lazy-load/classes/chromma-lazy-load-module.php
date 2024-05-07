@@ -31,7 +31,8 @@ class Chromma_Lazy_Load_Module {
 
     libxml_use_internal_errors(true);
     //initialize a dom document for easier more accurate parsing
-    $content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
+    //$content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
+    //$content = htmlentities($content, ENT_QUOTES, 'UTF-8');
     $dom = new DOMDocument();
     $dom->loadHTML($content);
 
