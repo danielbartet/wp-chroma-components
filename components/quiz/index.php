@@ -55,10 +55,10 @@ function cm_event_processer(WP_REST_Request $request) {
       );
       //LOGIC FOR INCREMENTING INSERTING ARRAY values
       if (
-        $request['value1']
+        isset($request['value1'])
         && !empty($request['value1'])
         && $request['value1'] !== 'null'
-        && $request['value2']
+        && isset($request['value2'])
         && !empty($request['value2'])
         && $request['value2'] !== 'null'
       ) {

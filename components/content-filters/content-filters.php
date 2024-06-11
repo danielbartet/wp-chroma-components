@@ -2,6 +2,30 @@
 //custom filters for content
 global $post;
 
+function sanitize_html($html) {
+    // Remover tags problemáticas o arreglar HTML mal formado
+     $html = str_replace(array('&nbsp;', '&Acirc;', '&acirc;', '&lt;', '&gt;'), array(' ','','', '<', '>'), $html);
+    $html = str_replace('€”', '—', $html);
+    $html = str_replace('&#128;&#148;', '—', $html);
+
+    $html = str_replace('â€™', '’', $html);
+    $html = str_replace('â€œ', '“', $html);
+    $html = str_replace('â€�', '”', $html);
+
+    if (function_exists('tidy_parse_string')) {
+        $config = array(
+            'indent' => true,
+            'output-xhtml' => true,
+            'wrap' => 200
+        );
+        $tidy = tidy_parse_string($html, $config, 'utf8');
+        $tidy->cleanRepair();
+        $html = $tidy->value;
+    }
+
+    return $html;
+}
+
 //filter for view as one page slider options
 function convert_multipage_post( $content ) {
   $content = str_replace('<!--nextpage-->', '', $content);
@@ -18,6 +42,7 @@ if (get_option('comments_button') == 'yes') {
           return $content;
         //$content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
         //$content = htmlentities($content, ENT_QUOTES, 'UTF-8');
+	$content = sanitize_html($content); 
         $dom = new DOMDocument();
         $dom->loadHTML($content);
         $comment = $dom->createElement('button');
@@ -55,19 +80,23 @@ if (get_option('comments_button') == 'yes') {
 
 //strip unwanted stuff from content
 function chroma_custom_content_filter( $content ) {
-  error_log("##############");
-  error_log($content);
+  //mb_internal_encoding("UTF-8");
   //$content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
-  //$content = htmlentities($content, ENT_QUOTES, 'UTF-8');
+ //$content = htmlspecialchars($content, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+// $content =  htmlentities($content, ENT_QUOTES | ENT_HTML401, 'UTF-8');
+  if($content){
   $dom = new DOMDocument();
-
-  libxml_use_internal_errors(true);
-  $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-  $errors = libxml_get_errors(); // Obtener los errores
-foreach ($errors as $error) {
+  $content = sanitize_html($content);
+ error_log("##############");
+  error_log($content);
+   libxml_use_internal_errors(true);
+  //$dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+  $dom->loadHTML($content);
+   $errors = libxml_get_errors(); // Obtener los errores
+  foreach ($errors as $error) {
     // Procesar o registrar los errores
     error_log("LibXML error: {$error->message}\n");
-}
+  }
   libxml_clear_errors();
 
   $content = preg_replace('/<p>\s*(<a .*>)?\s*(<img .*\s*\/>)\s*(<\/a>)?\s*<\/p>/iU', '\1\2\3', $content);
@@ -83,7 +112,7 @@ foreach ($errors as $error) {
   $content = $dom->saveHTML();
 
   $content = preg_replace(['/^<!DOCTYPE.+?>/', '/<html>/', '/<\/html>/', '/<body>/', '/<\/body>/'], ['', '', '', '', ''], $content);
-
+  }
   return $content;
 }
 add_filter( 'the_content', 'chroma_custom_content_filter', 99 );
